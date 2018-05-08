@@ -46,9 +46,11 @@
 				.get(profilePath, DEFAULT_API_PROFILE_ARGS)
 				.then(function ($response) {
 					if (!$response || $response.status !== 200) {
-						$reject($response.status);
+						return $reject($response.status);
 					}
-					return $resolve($response.body);
+					$resolve($response.body);
+				}, function ($error) {
+					$reject($error);
 				});
 		});
 	}
@@ -160,6 +162,8 @@
 				.then(function () {
 					deleteProfileLocal.call(self, self.context);
 					$resolve();
+				}, function ($error) {
+					$reject($error);
 				});
 		});
 	};
