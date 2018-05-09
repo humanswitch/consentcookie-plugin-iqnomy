@@ -139,7 +139,7 @@
 	};
 
 	Plugin.prototype.getProfile = function () {
-		return getProfile(this.context);
+		return getProfile.call(this,this.context);
 	};
 
 	Plugin.prototype.getProfileInfo = function ($id) {
