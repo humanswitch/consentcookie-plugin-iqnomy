@@ -43,25 +43,25 @@
 			}
 			var profilePath = getProfilePath(id);
 			$context.getLib('http')
-				.get(profilePath, DEFAULT_API_PROFILE_ARGS)
-				.then(function ($response) {
-					if (!$response || $response.status !== 200) {
-						return $reject($response.status);
-					}
-					$resolve($response.body);
-				}, function ($error) {
-					$reject($error);
-				});
+					.get(profilePath, DEFAULT_API_PROFILE_ARGS)
+					.then(function ($response) {
+						if (!$response || $response.status !== 200) {
+							return $reject($response.status);
+						}
+						$resolve($response.body);
+					}, function ($error) {
+						$reject($error);
+					});
 		});
 	}
 
 	function deleteProfileLocal($context) {
 		// TODO Clean this up
 		var hostparts = window.location.hostname.toString()
-			.split('.');
+				.split('.');
 		var domain = '.' + hostparts[hostparts.length - 2] + '.' + hostparts[hostparts.length - 1];
 		$context.getLib('cookie')
-			.remove(DEFAULT_COOKIE_NAME, {domain: domain});
+				.remove(DEFAULT_COOKIE_NAME, {domain: domain});
 	}
 
 	function deleteProfileRemote($context) {
@@ -84,7 +84,7 @@
 
 	function createProfileInfoHeader($lastPages) {
 		return "<div style='float:left;font-weight: bold;width: 30px; text-align: center;'>" + $lastPages.length + "</div>" +
-			"<div style='float:left;width: calc(100% - 30px);'>Je laatst bekeken pagina`s</div>"
+				"<div style='float:left;width: calc(100% - 30px);'>Je laatst bekeken pagina`s</div>"
 	}
 
 	function createProfileInfoContent($lastPages) {
@@ -131,7 +131,7 @@
 
 	Plugin.prototype.getProfileId = function () {
 		return this.context.getLib('cookie')
-			.get(DEFAULT_COOKIE_NAME);
+				.get(DEFAULT_COOKIE_NAME);
 	};
 
 	Plugin.prototype.getProfileIds = function ($global) {
@@ -139,18 +139,18 @@
 	};
 
 	Plugin.prototype.getProfile = function () {
-		return getProfile.call(this,this.context);
+		return getProfile.call(this, this.context);
 	};
 
 	Plugin.prototype.getProfileInfo = function ($id) {
 		var self = this;
 		return new Promise(function ($resolve, $reject) {
 			getProfile.call(self, self.context)
-				.then(function ($profile) {
-					return $resolve(createProfileInfo.call(self, $profile));
-				}, function ($error) {
-					return $reject(new Error('Unable to get profile. reason: ' + $error));
-				});
+					.then(function ($profile) {
+						return $resolve(createProfileInfo.call(self, $profile));
+					}, function ($error) {
+						return $reject(new Error('Unable to get profile. reason: ' + $error));
+					});
 		});
 	};
 
@@ -159,12 +159,12 @@
 
 		return new Promise(function ($resolve, $reject) {
 			deleteProfileRemote.call(self, self.context)
-				.then(function () {
-					deleteProfileLocal.call(self, self.context);
-					$resolve();
-				}, function ($error) {
-					$reject($error);
-				});
+					.then(function () {
+						deleteProfileLocal.call(self, self.context);
+						$resolve();
+					}, function ($error) {
+						$reject($error);
+					});
 		});
 	};
 
