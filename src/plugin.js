@@ -92,7 +92,7 @@
 		var pages = "";
 
 		_.each($lastPages, function ($page) {
-			pages = pages + "<ul style='margin: 7px 0px;list-style-position: inside;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>" + $page.url + "</ul>"
+			pages = pages + "<ul style='margin: 7px 0px;list-style-position: inside; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; width: 280px;' title='" + $page.url + "'>" + $page.url + "</ul>"
 		});
 		return "<ul style='margin: 10px 30px;list-style: none;font-size: 12px;'>" + pages + "</ul>";
 	}
@@ -108,10 +108,12 @@
 		_.each($profile.sessions, function ($session) {
 			if ($session && $session.events) {
 				_.each($session.events, function ($event) {
-					lastPages.push({
-						url: $event.url,
-						dateCreated: $event.dateCreated
-					});
+					if ($event && "PAGEVISIT" === $event.type) {
+						lastPages.push({
+							url: $event.url,
+							dateCreated: $event.dateCreated
+						});
+					}
 				})
 			}
 		});
