@@ -17,6 +17,7 @@
 (function ($global) {
 
 	var DEFAULT_ID = 'iq';
+	var DEFAULT_PURPOSE = 'ccp-6';
 	var DEFAULT_COOKIE_NAME = '_iqprid';
 	var DEFAULT_LIQUIDACCOUNT_PROPERTY_NAME = '_iqsTenant';
 	var DEFAULT_API_BASE_PATH = 'https://myliquidsuite-api.iqnomy.com/api/liquidaccount/';
@@ -32,13 +33,13 @@
 	function getProfilePath($id) {
 		var liquidAccountId = $global[DEFAULT_LIQUIDACCOUNT_PROPERTY_NAME];
 		return DEFAULT_API_BASE_PATH + liquidAccountId + DEFAULT_API_PROFILE_PATH + $id;
-	};
+	}
 
 	function getProfile($context) {
 		var id = this.getProfileId();
 
 		return new Promise(function ($resolve, $reject) {
-			if (!(typeof id === 'string') || id.trim().length === 0) {
+			if ((typeof id !== 'string') || id.trim().length === 0) {
 				return $reject(-1);
 			}
 			var profilePath = getProfilePath(id);
@@ -79,12 +80,12 @@
 		return {
 			header: createProfileInfoHeader.call(self, lastPages),
 			content: createProfileInfoContent.call(self, lastPages),
-		}
+		};
 	}
 
 	function createProfileInfoHeader($lastPages) {
 		return "<div style='float:left;font-weight: bold;width: 30px; text-align: center;'>" + $lastPages.length + "</div>" +
-				"<div style='float:left;width: calc(100% - 30px);'>Je laatst bekeken pagina`s</div>"
+				"<div style='float:left;width: calc(100% - 30px);'>Je laatst bekeken pagina`s</div>";
 	}
 
 	function createProfileInfoContent($lastPages) {
@@ -92,7 +93,7 @@
 		var pages = "";
 
 		_.each($lastPages, function ($page) {
-			pages = pages + "<ul style='margin: 7px 0px;list-style-position: inside; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; width: 280px;' title='" + $page.url + "'>" + $page.url + "</ul>"
+			pages = pages + "<ul style='margin: 7px 0px;list-style-position: inside; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; width: 280px;' title='" + $page.url + "'>" + $page.url + "</ul>";
 		});
 		return "<ul style='margin: 10px 30px;list-style: none;font-size: 12px;'>" + pages + "</ul>";
 	}
@@ -114,7 +115,7 @@
 							dateCreated: $event.dateCreated
 						});
 					}
-				})
+				});
 			}
 		});
 		return lastPages;
@@ -175,5 +176,12 @@
 	}
 
 	$global.ConsentCookie.registerPlugin(new Plugin());
+	$global.ConsentCookie.on('consent', function ($payload) {
+		if ($payload.id === DEFAULT_ID || $payload.id === DEFAULT_PURPOSE) {
+			var consent = ConsentCookie.getConsent(DEFAULT_ID).isEnabled() || ConsentCookie.getConsent(DEFAULT_PURPOSE).isEnabled();
+			window._iqsImpress = window._iqsImpress || {};
+			window._iqsImpress.dnt = !consent;
+		}
+	});
 
 })(window);
